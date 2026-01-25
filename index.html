@@ -18,15 +18,7 @@ button:hover{background:#084a91;}
 .progress-bar{background:#ddd;border-radius:10px;height:14px;margin-top:6px;}
 .progress{background:#0a2e5c;height:100%;width:0%;}
 .recommendation{background:#eef4ff;padding:12px;border-radius:5px;margin-top:10px;}
-.chips span{background:#e0ebff;padding:7px 12px;border-radius:20px;margin:5px;
-display:inline-block;cursor:pointer;}
 .status{font-weight:bold;color:green;}
-.chip.active{
-background:#0a2e5c;
-color:white;
-}
-
-/* Fade + Slide Animation */
 .fade-in {
 animation: fadeIn 0.6s ease-in-out;
 }
@@ -54,16 +46,6 @@ transform:translateY(0);
 /* Smooth progress bar */
 .progress{
 transition: width 0.8s ease-in-out;
-}
-
-/* Chip animation */
-.chip{
-transition: all 0.25s ease;
-}
-.chip.active{
-background:#0a2e5c;
-color:white;
-transform: scale(1.05);
 }
 
 /* Spinner */
@@ -174,13 +156,8 @@ gap:6px;
 <div class="card">
 <h2>❤️ Wishlist</h2>
 <textarea id="wishlist"></textarea>
-
-
-
-
 <label>Monthly Income ($)</label>
 <input type="number" id="income">
-
 <button id="genBtn" onclick="startGenerate()">Generate Plan</button>
 <div id="loader" class="spinner"></div>
 </div>
@@ -202,8 +179,6 @@ gap:6px;
 <script>
 
 let goalsData=[];
-
-
 
 function startGenerate(){
 let btn=document.getElementById("genBtn");
@@ -230,16 +205,16 @@ if(!w || !income){alert("Enter details");return;}
 
 goalsData=[];
 
-if(w.includes("home") || w.includes("house") || w.includes("apartment"))
+if(w.includes("home") || w.includes("house") || w.includes("apartment") || w.includes("plot") || w.includes("flat")) 
 goalsData.push({title:"Home",icon:"🏠",target:80000,months:36});
 
-if(w.includes("education") || w.includes("college") || w.includes("school"))
+if(w.includes("education") || w.includes("study") || w.includes("college") || w.includes("school"))
 goalsData.push({title:"Education",icon:"🎓",target:40000,months:120});
 
-if(w.includes("car") || w.includes("vehicle"))
+if(w.includes("car") || w.includes("vehicle") || w.includes("bike"))
 goalsData.push({title:"Car",icon:"🚗",target:30000,months:48});
 
-if(w.includes("travel") || w.includes("vacation") || w.includes("trip"))
+if(w.includes("travel") || w.includes("vacation") || w.includes("trip") || w.includes("tour"))
 goalsData.push({title:"Travel",icon:"✈️",target:6000,months:12});
 
 if(w.includes("retire"))
