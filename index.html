@@ -1,372 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Smart Goal Carousel – Bank Dashboard</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-:root {
-  --primary:#0b5ed7;
-  --accent:#00b4d8;
-  --bg:#f4f7ff;
-  --card:#ffffff;
-  --text:#1f2937;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary-navy: #003366;
+            --action-red: #E31837;
+            --bg-gray: #f4f7f9;
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
 
-body{
-  font-family:"Segoe UI",system-ui,sans-serif;
-  background:linear-gradient(135deg,#eef2ff,#f8fbff);
-  margin:0;
-  padding:24px;
-  color:var(--text);
-}
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; 
+            background-color: var(--bg-gray);
+            margin: 0; color: #333;
+        }
 
-.header{
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  color:#fff;
-  padding:22px;
-  border-radius:18px;
-  margin-bottom:40px;
-  text-align:center;
-}
+        /* Responsive Header */
+        header {
+            background: #fff;
+            padding: 15px 20px;
+            text-align: center;
+            border-bottom: 3px solid var(--action-red);
+            position: sticky; top: 0; z-index: 100;
+        }
 
-.dashboard{
-  display:flex;
-  gap:20px;
-  flex-wrap:wrap;
-  justify-content:center;
-}
+        header h1 {
+            margin: 0; font-size: 1.1rem; letter-spacing: 1px;
+            color: var(--primary-navy); text-transform: uppercase;
+        }
 
-.wishlist-list{
-  background:rgba(255,255,255,0.9);
-  color:#000;
-  border-radius:8px;
-  padding:12px;
-  font-size:14px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.2);
-  flex-shrink:0;
-  max-width:180px;
-  height:max-content;
-}
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-.wishlist-list div{
-  padding:6px 8px;
-  cursor:pointer;
-  border-radius:6px;
-  transition:background 0.3s,color 0.3s;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
+        /* Wishlist: Horizontal Scroll on Mobile, Grid on Desktop */
+        .wishlist-nav {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 10px 5px 25px 5px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .wishlist-nav::-webkit-scrollbar { display: none; }
 
-.wishlist-list div:hover{
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  color:#fff;
-}
+        .wish-card {
+            min-width: 160px;
+            background: #fff;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            border-bottom: 3px solid transparent;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
 
-.wishlist-list div.active{
-  background:linear-gradient(135deg,var(--accent),var(--primary));
-  color:#fff;
-}
+        .wish-card.active {
+            border-bottom-color: var(--action-red);
+            transform: translateY(-5px);
+        }
 
-.wishlist-list div span{
-  font-size:16px;
-  margin-left:6px;
-}
+        .wish-card h4 { margin: 0; font-size: 0.9rem; color: var(--primary-navy); }
+        .wish-card p { margin: 4px 0 0; font-size: 0.75rem; color: #666; font-weight: 600; }
 
-.carousel-section{
-  background:var(--card);
-  border-radius:20px;
-  padding:28px;
-  box-shadow:0 14px 40px rgba(0,0,0,.12);
-  max-width:700px;
-  flex:1;
-  min-width:280px;
-  opacity:0;
-  transform:translateY(40px);
-  transition:1s;
-}
+        /* AI Suggestion Box: Becomes "Full Width" on Mobile */
+        .ai-container {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            position: relative;
+            margin-top: 10px;
+        }
 
-.carousel-section.visible{
-  opacity:1;
-  transform:translateY(0);
-}
+        .ai-track {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-.carousel{
-  overflow:hidden;
-  position:relative;
-  height:260px;
-}
+        .ai-panel {
+            min-width: 100%;
+            padding: 40px 25px;
+            box-sizing: border-box;
+            text-align: center;
+        }
 
-.carousel-track{
-  position:relative;
-  width:100%;
-  height:100%;
-}
+        .ai-panel span {
+            font-size: 0.7rem; color: #888;
+            text-transform: uppercase; letter-spacing: 2px;
+            display: block; margin-bottom: 15px;
+        }
 
-.slide{
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  opacity:0;
-  transition:opacity 1s ease;
-}
+        .ai-panel p {
+            font-size: 1.4rem;
+            line-height: 1.4;
+            color: var(--primary-navy);
+            font-weight: 300;
+            margin: 0 0 30px 0;
+        }
 
-.slide.active{
-  opacity:1;
-}
+        .ai-panel b { color: var(--action-red); font-weight: 700; }
 
-.slide-content{
-  text-align:center;
-  font-size:16px;
-  line-height:1.5;
-}
+        .cta-btn {
+            width: 100%;
+            max-width: 280px;
+            background: var(--action-red);
+            color: #fff;
+            border: none;
+            padding: 16px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border-radius: 4px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
 
-.slide-content ul{
-  list-style:none;
-  padding:0;
-  margin:12px 0 0 0;
-}
+        /* Progress Line */
+        .progress-wrap { width: 100%; height: 4px; background: #eee; }
+        .progress-bar { height: 100%; background: var(--primary-navy); width: 0%; }
 
-.slide-content li{
-  opacity:0;
-  transition:opacity 0.8s ease;
-  margin:8px 0;
-  cursor:pointer;
-  padding:6px 8px;
-  border-radius:6px;
-  background:rgba(11,94,215,0.05);
-  transition: all 0.3s ease;
-}
-
-.slide-content li:hover{
-  background:rgba(11,94,215,0.2);
-}
-
-.dots{
-  display:flex;
-  justify-content:center;
-  margin-top:16px;
-}
-
-.dot{
-  width:12px;
-  height:12px;
-  background:#dbe4ff;
-  border-radius:50%;
-  margin:0 6px;
-  overflow:hidden;
-  cursor:pointer;
-}
-
-.dot span{
-  display:block;
-  height:100%;
-  width:0%;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-}
-
-@media(max-width:768px){
-  .dashboard{
-    flex-direction:column;
-    align-items:center;
-  }
-  .wishlist-list{
-    display:flex;
-    max-width:100%;
-    overflow-x:auto;
-    white-space:nowrap;
-    padding:8px;
-    gap:8px;
-  }
-  .wishlist-list div{
-    display:inline-flex;
-    flex:none;
-  }
-  .carousel-section{
-    width:100%;
-  }
-}
-</style>
+        /* Mobile Optimization */
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            .ai-panel p { font-size: 1.25rem; }
+            .wish-card { min-width: 140px; padding: 12px; }
+        }
+    </style>
 </head>
 <body>
 
-<div class="header">
-  <h2>Smart Goal Planner</h2>
-  <p>AI-guided insights grouped by wishlists</p>
-</div>
+    <header>
+        <h1>My Life Goals</h1>
+    </header>
 
-<div class="dashboard">
-  <div class="wishlist-list" id="wishlist-list"></div>
-  <div class="carousel-section" id="wishlist-carousel">
-    <div class="carousel">
-      <div class="carousel-track"></div>
+    <div class="container">
+        <div class="wishlist-nav" id="wishlist-nav">
+            </div>
+
+        <div class="ai-container">
+            <div class="ai-track" id="ai-track">
+                </div>
+            <div class="progress-wrap">
+                <div class="progress-bar" id="timer"></div>
+            </div>
+        </div>
     </div>
-    <div class="dots"></div>
-  </div>
-</div>
 
 <script>
-// ------------------- WISHLISTS -------------------
-const wishlists=[
-  {icon:"🏡",goal:"Dream Home",years:5,title:"Dream Home in 5 Years"},
-  {icon:"🚗",goal:"Buy a Car",years:3,title:"Buy a Car in 3 Years"},
-  {icon:"✈️",goal:"World Travel",years:2,title:"World Travel in 2 Years"},
-  {icon:"📚",goal:"Education Fund",years:4,title:"Education Fund in 4 Years"},
-  {icon:"💍",goal:"Wedding Plan",years:2,title:"Wedding Plan in 2 Years"},
-  {icon:"🏖️",goal:"Retirement Travel",years:10,title:"Retirement Travel in 10 Years"}
-];
+    const wishlist = [
+        { name: "Dream Home", time: "5 Years", text: "Your <b>dream home</b> is not 5 years away. One <b>smart step today</b> puts the keys in your hand in 5 years." },
+        { name: "Debt Free", time: "18 Months", text: "A <b>debt-free life</b> starts with one consolidated move. Your <b>first payment today</b> clears your path." },
+        { name: "New Vehicle", time: "3 Years", text: "The <b>road ahead</b> looks premium. A <b>dedicated vehicle fund</b> today puts you in the driver's seat by 2029." },
+        { name: "Master's Degree", time: "1 Year", text: "Invest in <b>yourself</b> first. An <b>education bridge</b> today unlocks your promotion next year." }
+    ];
 
-const wishlistDuration=6000; 
-const suggestionDuration=2000;
+    let current = 0;
+    const nav = document.getElementById('wishlist-nav');
+    const track = document.getElementById('ai-track');
+    const timer = document.getElementById('timer');
 
-let index=0, carouselTimer=null, suggestionTimer=null;
+    nav.innerHTML = wishlist.map((item, i) => `
+        <div class="wish-card ${i===0?'active':''}" onclick="goTo(${i})">
+            <h4>${item.name}</h4>
+            <p>${item.time}</p>
+        </div>
+    `).join('');
 
-const track=document.querySelector(".carousel-track");
-const dotsContainer=document.querySelector(".dots");
+    track.innerHTML = wishlist.map(item => `
+        <div class="ai-panel">
+            <span>AI Strategy</span>
+            <p>${item.text}</p>
+            <button class="cta-btn">Convert to Goal</button>
+        </div>
+    `).join('');
 
-// ------------------- AI SUGGESTIONS -------------------
-function generateAI(goal,years){
-  const openers=[
-    "Your goal is closer than you think.",
-    "Smart financial habits create freedom.",
-    "Small steps today build big outcomes.",
-    "Planning early multiplies confidence."
-  ];
-  const actions=[
-    "automated savings",
-    "goal-based investments",
-    "disciplined monthly planning",
-    "smart banking decisions"
-  ];
-  return openers.map(o=>`${o} With ${actions[Math.floor(Math.random()*actions.length)]}, your ${goal.toLowerCase()} can be achieved in ${years} years.`);
-}
-
-// ------------------- CREATE SLIDES -------------------
-let slides=[], dots=[], wishlistDivs=[];
-
-wishlists.forEach((w,i)=>{
-  const suggestions=generateAI(w.goal,w.years);
-  const slide=document.createElement("div");
-  slide.className="slide";
-
-  let content=`<div class="slide-content"><strong>${w.icon} ${w.title}</strong><ul>`;
-  suggestions.forEach(s=>content+=`<li data-goal="${w.goal}" data-years="${w.years}">${s}</li>`);
-  content+="</ul></div>";
-
-  slide.innerHTML=content;
-  track.appendChild(slide);
-  slides.push(slide);
-
-  // Dot
-  const dot=document.createElement("div");
-  dot.className="dot";
-  dot.onclick=()=>goToSlide(slides.indexOf(slide));
-  const span=document.createElement("span");
-  dot.appendChild(span);
-  dotsContainer.appendChild(dot);
-
-  // Wishlist div with heart icon
-  const div=document.createElement("div");
-  div.innerHTML=`${w.icon} ${w.title} <span>❤️</span>`;
-  div.onclick=()=>goToSlide(i);
-  document.getElementById("wishlist-list").appendChild(div);
-  wishlistDivs.push(div);
-});
-
-// ------------------- SHOW SUGGESTIONS -------------------
-function showSuggestions(slide){
-  clearInterval(suggestionTimer);
-  const lis=slide.querySelectorAll("li");
-  lis.forEach(li=>li.style.opacity=0);
-
-  let si=0;
-  suggestionTimer=setInterval(()=>{
-    if(si<lis.length){
-      lis[si].style.opacity=1;
-      si++;
-    } else clearInterval(suggestionTimer);
-  }, suggestionDuration);
-}
-
-// ------------------- ACTIVATE SLIDE -------------------
-function activateSlide(i){
-  slides.forEach((s,j)=>s.classList.toggle("active", j===i));
-  dots.forEach((d,j)=>d.style.width="0%");
-  wishlistDivs.forEach((d,j)=>d.classList.toggle("active", j===i));
-  animateDot(dots[i]);
-  showSuggestions(slides[i]);
-}
-
-// ------------------- DOT ANIMATION -------------------
-function animateDot(dot){
-  let start=null;
-  function run(ts){
-    if(!start) start=ts;
-    const pct=Math.min((ts-start)/wishlistDuration*100,100);
-    dot.style.width=pct+"%";
-    if(pct<100)requestAnimationFrame(run);
-  }
-  requestAnimationFrame(run);
-}
-
-// ------------------- NAVIGATION -------------------
-function nextSlide(){
-  index=(index+1)%slides.length;
-  activateSlide(index);
-}
-
-function goToSlide(i){
-  index=i;
-  activateSlide(index);
-  pause(); play();
-}
-
-function play(){ carouselTimer=setInterval(nextSlide, wishlistDuration);}
-function pause(){ clearInterval(carouselTimer); clearInterval(suggestionTimer); }
-
-// ------------------- PAUSE ON HOVER -------------------
-document.querySelector(".carousel").addEventListener("mouseenter",pause);
-document.querySelector(".carousel").addEventListener("mouseleave",play);
-
-// ------------------- SWIPE SUPPORT -------------------
-let startX=0;
-document.querySelector(".carousel").addEventListener("touchstart",e=>startX=e.touches[0].clientX);
-document.querySelector(".carousel").addEventListener("touchend",e=>{
-  const diff=e.changedTouches[0].clientX-startX;
-  if(Math.abs(diff)>50){
-    if(diff<0) nextSlide();
-    else index=(index-1+slides.length)%slides.length, activateSlide(index);
-  }
-});
-
-// ------------------- SCROLL TRIGGER -------------------
-const section=document.querySelector(".carousel-section");
-const io=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      section.classList.add("visible");
-      activateSlide(index);
-      play();
-      io.unobserve(section);
+    function goTo(index) {
+        current = index;
+        track.style.transform = `translateX(-${current * 100}%)`;
+        const cards = document.querySelectorAll('.wish-card');
+        cards.forEach((c, i) => {
+            c.classList.toggle('active', i === current);
+            if(i === current) c.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+        });
+        resetTimer();
     }
-  });
-},{threshold:.3});
 
-io.observe(section);
+    function resetTimer() {
+        timer.style.transition = 'none';
+        timer.style.width = '0%';
+        setTimeout(() => {
+            timer.style.transition = 'width 6000ms linear';
+            timer.style.width = '100%';
+        }, 50);
+    }
 
-// ------------------- REDIRECT ON CLICK -------------------
-document.addEventListener("click",e=>{
-  if(e.target.tagName==="LI" && e.target.dataset.goal){
-    const goal=e.target.dataset.goal;
-    const years=e.target.dataset.years;
-    // redirect to goal creation page with prefilled params
-    const url=`goal_creation.html?goal=${encodeURIComponent(goal)}&years=${encodeURIComponent(years)}`;
-    window.location.href=url;
-  }
-});
+    setInterval(() => {
+        current = (current + 1) % wishlist.length;
+        goTo(current);
+    }, 6000);
+
+    resetTimer();
 </script>
 </body>
 </html>
