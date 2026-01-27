@@ -1,339 +1,372 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8">
+<title>Smart Goal Carousel – Bank Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IntentIQ – Editable Timelines</title>
-
 <style>
-body{font-family:Arial;background:#f4f6f8;margin:0;}
-.container{max-width:900px;margin:auto;padding:20px;}
-h1{color:#0a2e5c;}
-.card{background:white;padding:20px;border-radius:8px;margin-bottom:20px;
-box-shadow:0 2px 6px rgba(0,0,0,0.1);}
-textarea,input,button{width:100%;padding:10px;margin-top:10px;font-size:16px;}
-button{background:#0a2e5c;color:white;border:none;border-radius:5px;cursor:pointer;}
-button:hover{background:#084a91;}
-.hidden{display:none;}
-.goal{border-left:4px solid #0a2e5c;padding-left:15px;margin-top:15px;}
-.progress-bar{background:#ddd;border-radius:10px;height:14px;margin-top:6px;}
-.progress{background:#0a2e5c;height:100%;width:0%;}
-.recommendation{background:#eef4ff;padding:12px;border-radius:5px;margin-top:10px;}
-.status{font-weight:bold;color:green;}
-.fade-in {
-animation: fadeIn 0.6s ease-in-out;
+:root {
+  --primary:#0b5ed7;
+  --accent:#00b4d8;
+  --bg:#f4f7ff;
+  --card:#ffffff;
+  --text:#1f2937;
 }
 
-.slide-up {
-animation: slideUp 0.6s ease;
+body{
+  font-family:"Segoe UI",system-ui,sans-serif;
+  background:linear-gradient(135deg,#eef2ff,#f8fbff);
+  margin:0;
+  padding:24px;
+  color:var(--text);
 }
 
-@keyframes fadeIn {
-from {opacity:0;}
-to {opacity:1;}
+.header{
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  color:#fff;
+  padding:22px;
+  border-radius:18px;
+  margin-bottom:40px;
+  text-align:center;
 }
 
-@keyframes slideUp {
-from {
-opacity:0;
-transform:translateY(25px);
-}
-to {
-opacity:1;
-transform:translateY(0);
-}
+.dashboard{
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+  justify-content:center;
 }
 
-/* Smooth progress bar */
-.progress{
-transition: width 0.8s ease-in-out;
+.wishlist-list{
+  background:rgba(255,255,255,0.9);
+  color:#000;
+  border-radius:8px;
+  padding:12px;
+  font-size:14px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
+  flex-shrink:0;
+  max-width:180px;
+  height:max-content;
 }
 
-/* Spinner */
-.spinner{
-width:40px;
-height:40px;
-border:4px solid #ddd;
-border-top:4px solid #0a2e5c;
-border-radius:50%;
-animation: spin 1s linear infinite;
-margin:20px auto;
-display:none;
+.wishlist-list div{
+  padding:6px 8px;
+  cursor:pointer;
+  border-radius:6px;
+  transition:background 0.3s,color 0.3s;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-@keyframes spin{
-0%{transform:rotate(0deg);}
-100%{transform:rotate(360deg);}
+.wishlist-list div:hover{
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  color:#fff;
 }
 
-/* ---------- Mobile Responsive ---------- */
-
-@media (max-width: 768px){
-
-.container{
-padding:12px;
+.wishlist-list div.active{
+  background:linear-gradient(135deg,var(--accent),var(--primary));
+  color:#fff;
 }
 
-h1{
-font-size:22px;
+.wishlist-list div span{
+  font-size:16px;
+  margin-left:6px;
 }
 
-h2{
-font-size:18px;
+.carousel-section{
+  background:var(--card);
+  border-radius:20px;
+  padding:28px;
+  box-shadow:0 14px 40px rgba(0,0,0,.12);
+  max-width:700px;
+  flex:1;
+  min-width:280px;
+  opacity:0;
+  transform:translateY(40px);
+  transition:1s;
 }
 
-.card{
-padding:15px;
+.carousel-section.visible{
+  opacity:1;
+  transform:translateY(0);
 }
 
-textarea{
-font-size:15px;
+.carousel{
+  overflow:hidden;
+  position:relative;
+  height:260px;
 }
 
-input{
-font-size:15px;
-padding:12px;
+.carousel-track{
+  position:relative;
+  width:100%;
+  height:100%;
 }
 
-button{
-font-size:16px;
-padding:12px;
+.slide{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  opacity:0;
+  transition:opacity 1s ease;
 }
 
-.goal h3{
-font-size:16px;
+.slide.active{
+  opacity:1;
 }
 
-.progress-bar{
-height:12px;
+.slide-content{
+  text-align:center;
+  font-size:16px;
+  line-height:1.5;
 }
 
-label{
-font-size:14px;
+.slide-content ul{
+  list-style:none;
+  padding:0;
+  margin:12px 0 0 0;
 }
 
+.slide-content li{
+  opacity:0;
+  transition:opacity 0.8s ease;
+  margin:8px 0;
+  cursor:pointer;
+  padding:6px 8px;
+  border-radius:6px;
+  background:rgba(11,94,215,0.05);
+  transition: all 0.3s ease;
 }
 
-/* Small phones */
-@media (max-width: 420px){
-
-h1{
-text-align:center;
+.slide-content li:hover{
+  background:rgba(11,94,215,0.2);
 }
 
-button{
-width:100%;
+.dots{
+  display:flex;
+  justify-content:center;
+  margin-top:16px;
 }
 
-.card{
-border-radius:6px;
+.dot{
+  width:12px;
+  height:12px;
+  background:#dbe4ff;
+  border-radius:50%;
+  margin:0 6px;
+  overflow:hidden;
+  cursor:pointer;
 }
 
+.dot span{
+  display:block;
+  height:100%;
+  width:0%;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
 }
 
-.goal{
-display:flex;
-flex-direction:column;
-gap:6px;
+@media(max-width:768px){
+  .dashboard{
+    flex-direction:column;
+    align-items:center;
+  }
+  .wishlist-list{
+    display:flex;
+    max-width:100%;
+    overflow-x:auto;
+    white-space:nowrap;
+    padding:8px;
+    gap:8px;
+  }
+  .wishlist-list div{
+    display:inline-flex;
+    flex:none;
+  }
+  .carousel-section{
+    width:100%;
+  }
 }
-
-
 </style>
 </head>
-
 <body>
 
-<div class="container">
-<h1>Goal Dashboard</h1>
-
-<!-- DASHBOARD -->
-<div class="card hidden" id="dashboard">
-<h2>📊 Summary</h2>
-<p id="totalMonthly"></p>
-<p id="status" class="status"></p>
+<div class="header">
+  <h2>Smart Goal Planner</h2>
+  <p>AI-guided insights grouped by wishlists</p>
 </div>
 
-<!-- WISHLIST -->
-<div class="card">
-<h2>❤️ Wishlist</h2>
-<textarea id="wishlist"></textarea>
-<label>Monthly Income ($)</label>
-<input type="number" id="income">
-<button id="genBtn" onclick="startGenerate()">Generate Plan</button>
-<div id="loader" class="spinner"></div>
-</div>
-
-<!-- GOALS -->
-<div class="card hidden" id="goalsCard">
-<h2>🎯 Goals (Edit Months)</h2>
-<div id="goals"></div>
-</div>
-
-<!-- RECOMMENDATIONS -->
-<div class="card hidden" id="recCard">
-<h2>💡 Recommendations</h2>
-<div id="recs"></div>
-</div>
-
+<div class="dashboard">
+  <div class="wishlist-list" id="wishlist-list"></div>
+  <div class="carousel-section" id="wishlist-carousel">
+    <div class="carousel">
+      <div class="carousel-track"></div>
+    </div>
+    <div class="dots"></div>
+  </div>
 </div>
 
 <script>
+// ------------------- WISHLISTS -------------------
+const wishlists=[
+  {icon:"🏡",goal:"Dream Home",years:5,title:"Dream Home in 5 Years"},
+  {icon:"🚗",goal:"Buy a Car",years:3,title:"Buy a Car in 3 Years"},
+  {icon:"✈️",goal:"World Travel",years:2,title:"World Travel in 2 Years"},
+  {icon:"📚",goal:"Education Fund",years:4,title:"Education Fund in 4 Years"},
+  {icon:"💍",goal:"Wedding Plan",years:2,title:"Wedding Plan in 2 Years"},
+  {icon:"🏖️",goal:"Retirement Travel",years:10,title:"Retirement Travel in 10 Years"}
+];
 
-let goalsData=[];
+const wishlistDuration=6000; 
+const suggestionDuration=2000;
 
-function startGenerate(){
-let btn=document.getElementById("genBtn");
-let loader=document.getElementById("loader");
+let index=0, carouselTimer=null, suggestionTimer=null;
 
-btn.disabled=true;
-btn.innerText="Generating...";
-loader.style.display="block";
+const track=document.querySelector(".carousel-track");
+const dotsContainer=document.querySelector(".dots");
 
-setTimeout(()=>{
-loader.style.display="none";
-btn.disabled=false;
-btn.innerText="Generate Plan";
-generate();
-},1000);
+// ------------------- AI SUGGESTIONS -------------------
+function generateAI(goal,years){
+  const openers=[
+    "Your goal is closer than you think.",
+    "Smart financial habits create freedom.",
+    "Small steps today build big outcomes.",
+    "Planning early multiplies confidence."
+  ];
+  const actions=[
+    "automated savings",
+    "goal-based investments",
+    "disciplined monthly planning",
+    "smart banking decisions"
+  ];
+  return openers.map(o=>`${o} With ${actions[Math.floor(Math.random()*actions.length)]}, your ${goal.toLowerCase()} can be achieved in ${years} years.`);
 }
 
-function generate(){
+// ------------------- CREATE SLIDES -------------------
+let slides=[], dots=[], wishlistDivs=[];
 
-let w = document.getElementById("wishlist").value.toLowerCase();
+wishlists.forEach((w,i)=>{
+  const suggestions=generateAI(w.goal,w.years);
+  const slide=document.createElement("div");
+  slide.className="slide";
 
-let income=parseInt(document.getElementById("income").value);
-if(!w || !income){alert("Enter details");return;}
+  let content=`<div class="slide-content"><strong>${w.icon} ${w.title}</strong><ul>`;
+  suggestions.forEach(s=>content+=`<li data-goal="${w.goal}" data-years="${w.years}">${s}</li>`);
+  content+="</ul></div>";
 
-goalsData=[];
+  slide.innerHTML=content;
+  track.appendChild(slide);
+  slides.push(slide);
 
-if(w.includes("home") || w.includes("house") || w.includes("apartment") || w.includes("plot") || w.includes("flat")) 
-goalsData.push({title:"Home",icon:"🏠",target:80000,months:36});
+  // Dot
+  const dot=document.createElement("div");
+  dot.className="dot";
+  dot.onclick=()=>goToSlide(slides.indexOf(slide));
+  const span=document.createElement("span");
+  dot.appendChild(span);
+  dotsContainer.appendChild(dot);
 
-if(w.includes("education") || w.includes("study") || w.includes("college") || w.includes("school"))
-goalsData.push({title:"Education",icon:"🎓",target:40000,months:120});
-
-if(w.includes("car") || w.includes("vehicle") || w.includes("bike"))
-goalsData.push({title:"Car",icon:"🚗",target:30000,months:48});
-
-if(w.includes("travel") || w.includes("vacation") || w.includes("trip") || w.includes("tour"))
-goalsData.push({title:"Travel",icon:"✈️",target:6000,months:12});
-
-if(w.includes("retire"))
-goalsData.push({title:"Retirement",icon:"💼",target:500000,months:300});
-
-
-if(goalsData.length===0){
-alert("We couldn't recognize a goal. Try words like home, car, education, travel, retirement.");
-return;
-}
-
-
-showSection("dashboard");
-showSection("goalsCard");
-showSection("recCard");
-
-
-renderGoals();
-}
-
-function showSection(id){
-let el=document.getElementById(id);
-el.classList.remove("hidden");
-el.classList.add("fade-in");
-}
-
-
-function renderGoals(){
-let income=parseInt(document.getElementById("income").value);
-let html="";
-let total=0;
-
-goalsData.forEach((g,index)=>{
-let monthly=Math.round(g.target/g.months);
-total+=monthly;
-let progress=Math.min(100,Math.round((monthly/income)*100));
-
-html+=`
-<div class="goal slide-up" id="goal-${index}">
-<h3>${g.icon} ${g.title}</h3>
-<p>Target: $${g.target}</p>
-
-<label>Months:
-<input type="number" value="${g.months}"
-oninput="updateMonths(${index}, this.value)">
-</label>
-
-<p>Monthly: <b>$<span id="monthly-${index}"></span></b></p>
-
-<div class="progress-bar">
-<div class="progress" id="progress-${index}"></div>
-</div>
-</div>`;
-
+  // Wishlist div with heart icon
+  const div=document.createElement("div");
+  div.innerHTML=`${w.icon} ${w.title} <span>❤️</span>`;
+  div.onclick=()=>goToSlide(i);
+  document.getElementById("wishlist-list").appendChild(div);
+  wishlistDivs.push(div);
 });
 
-document.getElementById("goals").innerHTML=html;
+// ------------------- SHOW SUGGESTIONS -------------------
+function showSuggestions(slide){
+  clearInterval(suggestionTimer);
+  const lis=slide.querySelectorAll("li");
+  lis.forEach(li=>li.style.opacity=0);
 
-document.getElementById("totalMonthly").innerText=
-"Total Monthly Commitment: $" + total;
+  let si=0;
+  suggestionTimer=setInterval(()=>{
+    if(si<lis.length){
+      lis[si].style.opacity=1;
+      si++;
+    } else clearInterval(suggestionTimer);
+  }, suggestionDuration);
+}
 
-document.getElementById("status").innerText=
-(total < income*0.5) ? "Status: On Track ✅" : "Status: Review Needed ⚠️";
+// ------------------- ACTIVATE SLIDE -------------------
+function activateSlide(i){
+  slides.forEach((s,j)=>s.classList.toggle("active", j===i));
+  dots.forEach((d,j)=>d.style.width="0%");
+  wishlistDivs.forEach((d,j)=>d.classList.toggle("active", j===i));
+  animateDot(dots[i]);
+  showSuggestions(slides[i]);
+}
 
-document.getElementById("recs").innerHTML=`
-<div class="recommendation">
-<b>Auto-Savings Setup</b>
-<p>Save $${total}/month automatically</p>
-</div>
-<div class="recommendation">
-<b>High-Yield Savings</b>
-<p>For short-term goals</p>
-</div>
-<div class="recommendation">
-<b>Investments</b>
-<p>For long-term growth</p>
-</div>`;
+// ------------------- DOT ANIMATION -------------------
+function animateDot(dot){
+  let start=null;
+  function run(ts){
+    if(!start) start=ts;
+    const pct=Math.min((ts-start)/wishlistDuration*100,100);
+    dot.style.width=pct+"%";
+    if(pct<100)requestAnimationFrame(run);
+  }
+  requestAnimationFrame(run);
+}
 
-goalsData.forEach((g,index)=>{
-updateGoalUI(index);
+// ------------------- NAVIGATION -------------------
+function nextSlide(){
+  index=(index+1)%slides.length;
+  activateSlide(index);
+}
+
+function goToSlide(i){
+  index=i;
+  activateSlide(index);
+  pause(); play();
+}
+
+function play(){ carouselTimer=setInterval(nextSlide, wishlistDuration);}
+function pause(){ clearInterval(carouselTimer); clearInterval(suggestionTimer); }
+
+// ------------------- PAUSE ON HOVER -------------------
+document.querySelector(".carousel").addEventListener("mouseenter",pause);
+document.querySelector(".carousel").addEventListener("mouseleave",play);
+
+// ------------------- SWIPE SUPPORT -------------------
+let startX=0;
+document.querySelector(".carousel").addEventListener("touchstart",e=>startX=e.touches[0].clientX);
+document.querySelector(".carousel").addEventListener("touchend",e=>{
+  const diff=e.changedTouches[0].clientX-startX;
+  if(Math.abs(diff)>50){
+    if(diff<0) nextSlide();
+    else index=(index-1+slides.length)%slides.length, activateSlide(index);
+  }
 });
-}
 
-function updateMonths(index,val){
-if(val<=0) return;
+// ------------------- SCROLL TRIGGER -------------------
+const section=document.querySelector(".carousel-section");
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      section.classList.add("visible");
+      activateSlide(index);
+      play();
+      io.unobserve(section);
+    }
+  });
+},{threshold:.3});
 
-goalsData[index].months = parseInt(val);
-updateGoalUI(index);
-updateDashboard();
-}
+io.observe(section);
 
-function updateGoalUI(index){
-let g = goalsData[index];
-let income = parseInt(document.getElementById("income").value);
-
-let monthly = Math.round(g.target / g.months);
-let progress = Math.min(100, Math.round((monthly / income) * 100));
-
-document.getElementById(`monthly-${index}`).innerText = monthly;
-document.getElementById(`progress-${index}`).style.width = progress + "%";
-}
-
-function updateDashboard(){
-let income = parseInt(document.getElementById("income").value);
-let total = 0;
-
-goalsData.forEach(g=>{
-total += Math.round(g.target / g.months);
+// ------------------- REDIRECT ON CLICK -------------------
+document.addEventListener("click",e=>{
+  if(e.target.tagName==="LI" && e.target.dataset.goal){
+    const goal=e.target.dataset.goal;
+    const years=e.target.dataset.years;
+    // redirect to goal creation page with prefilled params
+    const url=`goal_creation.html?goal=${encodeURIComponent(goal)}&years=${encodeURIComponent(years)}`;
+    window.location.href=url;
+  }
 });
-
-document.getElementById("totalMonthly").innerText =
-"Total Monthly Commitment: $" + total;
-
-document.getElementById("status").innerText =
-(total < income * 0.5) ? "Status: On Track ✅" : "Status: Review Needed ⚠️";
-}
-
-
 </script>
-
 </body>
 </html>
