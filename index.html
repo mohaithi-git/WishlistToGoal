@@ -5,207 +5,206 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         :root {
-            --primary-navy: #003366;
-            --action-red: #E31837;
-            --bg-gray: #f4f7f9;
-            --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --navy: #003366;
+            --red: #E31837;
+            --slate: #f4f7f9;
+            --white: #ffffff;
         }
 
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; 
-            background-color: var(--bg-gray);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: var(--slate);
             margin: 0; color: #333;
+            display: flex; flex-direction: column; min-height: 100vh;
         }
 
         /* Responsive Header */
         header {
-            background: #fff;
-            padding: 15px 20px;
-            text-align: center;
-            border-bottom: 3px solid var(--action-red);
-            position: sticky; top: 0; z-index: 100;
-        }
-
-        header h1 {
-            margin: 0; font-size: 1.1rem; letter-spacing: 1px;
-            color: var(--primary-navy); text-transform: uppercase;
+            background: var(--white);
+            padding: 1rem 5%;
+            border-bottom: 3px solid var(--red);
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000;
         }
 
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
+            width: 100%; max-width: 1200px;
+            margin: 0 auto; padding: 20px;
+            box-sizing: border-box;
         }
 
-        /* Wishlist: Horizontal Scroll on Mobile, Grid on Desktop */
+        /* --- WISHLIST NAVIGATION --- */
         .wishlist-nav {
             display: flex;
-            gap: 12px;
+            gap: 15px;
             overflow-x: auto;
-            padding: 10px 5px 25px 5px;
-            scroll-behavior: smooth;
+            padding: 10px 5px 30px 5px;
+            scrollbar-width: none; /* Hide scrollbar Firefox */
             -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
         }
-        .wishlist-nav::-webkit-scrollbar { display: none; }
+        .wishlist-nav::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome */
 
         .wish-card {
-            min-width: 160px;
-            background: #fff;
-            padding: 16px;
-            border-radius: 8px;
-            box-shadow: var(--card-shadow);
-            border-bottom: 3px solid transparent;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            flex-shrink: 0;
+            background: var(--white);
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             cursor: pointer;
+            transition: 0.3s ease;
+            border-bottom: 3px solid transparent;
+            flex: 0 0 200px; /* Fixed width for mobile scrolling */
         }
 
         .wish-card.active {
-            border-bottom-color: var(--action-red);
+            border-bottom-color: var(--red);
             transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        .wish-card h4 { margin: 0; font-size: 0.9rem; color: var(--primary-navy); }
-        .wish-card p { margin: 4px 0 0; font-size: 0.75rem; color: #666; font-weight: 600; }
-
-        /* AI Suggestion Box: Becomes "Full Width" on Mobile */
-        .ai-container {
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: var(--card-shadow);
+        /* --- AI INSIGHT SECTION --- */
+        .ai-vault {
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.08);
             overflow: hidden;
             position: relative;
-            margin-top: 10px;
         }
 
         .ai-track {
             display: flex;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .ai-panel {
             min-width: 100%;
-            padding: 40px 25px;
+            padding: 60px 10%;
             box-sizing: border-box;
             text-align: center;
         }
 
-        .ai-panel span {
-            font-size: 0.7rem; color: #888;
-            text-transform: uppercase; letter-spacing: 2px;
-            display: block; margin-bottom: 15px;
-        }
-
         .ai-panel p {
-            font-size: 1.4rem;
-            line-height: 1.4;
-            color: var(--primary-navy);
+            font-size: 1.8rem;
+            color: var(--navy);
             font-weight: 300;
-            margin: 0 0 30px 0;
+            line-height: 1.4;
+            margin-bottom: 30px;
         }
 
-        .ai-panel b { color: var(--action-red); font-weight: 700; }
-
-        .cta-btn {
-            width: 100%;
-            max-width: 280px;
-            background: var(--action-red);
-            color: #fff;
+        .btn-convert {
+            background: var(--red);
+            color: white;
+            padding: 16px 40px;
             border: none;
-            padding: 16px;
-            font-size: 0.9rem;
+            border-radius: 2px;
             font-weight: bold;
-            border-radius: 4px;
             text-transform: uppercase;
             cursor: pointer;
+            width: 100%;
+            max-width: 300px;
         }
 
-        /* Progress Line */
-        .progress-wrap { width: 100%; height: 4px; background: #eee; }
-        .progress-bar { height: 100%; background: var(--primary-navy); width: 0%; }
+        /* --- DESKTOP ADAPTATIONS --- */
+        @media (min-width: 1024px) {
+            .wishlist-nav {
+                justify-content: center;
+                overflow: hidden;
+                flex-wrap: nowrap;
+            }
+            .wish-card {
+                flex: 1; /* Stretch cards to fill space on desktop */
+                max-width: 220px;
+            }
+            .ai-panel p {
+                font-size: 2.2rem;
+            }
+        }
 
-        /* Mobile Optimization */
+        /* --- MOBILE ADAPTATIONS --- */
         @media (max-width: 600px) {
-            .container { padding: 15px; }
-            .ai-panel p { font-size: 1.25rem; }
-            .wish-card { min-width: 140px; padding: 12px; }
+            .ai-panel { padding: 40px 20px; }
+            .ai-panel p { font-size: 1.3rem; }
+            .wish-card { flex: 0 0 160px; padding: 15px; }
+            header h1 { font-size: 1rem; }
+        }
+
+        .progress-line {
+            height: 4px; background: var(--navy);
+            width: 0%; position: absolute; bottom: 0;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>My Life Goals</h1>
-    </header>
+<header>
+    <h1 style="color:var(--navy); margin:0; text-transform:uppercase; letter-spacing:2px; font-size: 1rem;">Life Plan Goals</h1>
+    <div style="color:var(--red); font-weight:bold; font-size:0.8rem;">PRO ADVISOR</div>
+</header>
 
-    <div class="container">
-        <div class="wishlist-nav" id="wishlist-nav">
-            </div>
-
-        <div class="ai-container">
-            <div class="ai-track" id="ai-track">
-                </div>
-            <div class="progress-wrap">
-                <div class="progress-bar" id="timer"></div>
-            </div>
+<div class="container">
+    <div class="wishlist-nav" id="wish-nav">
         </div>
+
+    <div class="ai-vault">
+        <div class="ai-track" id="ai-track">
+            </div>
+        <div class="progress-line" id="progress"></div>
     </div>
+</div>
 
 <script>
-    const wishlist = [
+    const data = [
         { name: "Dream Home", time: "5 Years", text: "Your <b>dream home</b> is not 5 years away. One <b>smart step today</b> puts the keys in your hand in 5 years." },
+        { name: "Global Travel", time: "2 Years", text: "The <b>world</b> is ready for you. A <b>savings allocation today</b> guarantees your departure in 24 months." },
         { name: "Debt Free", time: "18 Months", text: "A <b>debt-free life</b> starts with one consolidated move. Your <b>first payment today</b> clears your path." },
-        { name: "New Vehicle", time: "3 Years", text: "The <b>road ahead</b> looks premium. A <b>dedicated vehicle fund</b> today puts you in the driver's seat by 2029." },
-        { name: "Master's Degree", time: "1 Year", text: "Invest in <b>yourself</b> first. An <b>education bridge</b> today unlocks your promotion next year." }
+        { name: "New Vehicle", time: "3 Years", text: "The <b>road ahead</b> looks premium. A <b>dedicated vehicle fund</b> today puts you in the driver's seat by 2029." }
     ];
 
-    let current = 0;
-    const nav = document.getElementById('wishlist-nav');
+    const nav = document.getElementById('wish-nav');
     const track = document.getElementById('ai-track');
-    const timer = document.getElementById('timer');
+    const progress = document.getElementById('progress');
+    let current = 0;
 
-    nav.innerHTML = wishlist.map((item, i) => `
-        <div class="wish-card ${i===0?'active':''}" onclick="goTo(${i})">
-            <h4>${item.name}</h4>
-            <p>${item.time}</p>
+    nav.innerHTML = data.map((d, i) => `
+        <div class="wish-card ${i===0?'active':''}" onclick="setSlide(${i})">
+            <h4 style="margin:0; color:var(--navy); font-size:0.9rem;">${d.name}</h4>
+            <p style="margin:5px 0 0; font-size:0.75rem; color:#666;">${d.time}</p>
         </div>
     `).join('');
 
-    track.innerHTML = wishlist.map(item => `
+    track.innerHTML = data.map(d => `
         <div class="ai-panel">
-            <span>AI Strategy</span>
-            <p>${item.text}</p>
-            <button class="cta-btn">Convert to Goal</button>
+            <p>${d.text}</p>
+            <button class="btn-convert">Convert to Goal</button>
         </div>
     `).join('');
 
-    function goTo(index) {
+    function setSlide(index) {
         current = index;
         track.style.transform = `translateX(-${current * 100}%)`;
-        const cards = document.querySelectorAll('.wish-card');
-        cards.forEach((c, i) => {
+        
+        document.querySelectorAll('.wish-card').forEach((c, i) => {
             c.classList.toggle('active', i === current);
-            if(i === current) c.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+            if(i === current) c.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         });
         resetTimer();
     }
 
     function resetTimer() {
-        timer.style.transition = 'none';
-        timer.style.width = '0%';
+        progress.style.transition = 'none';
+        progress.style.width = '0%';
         setTimeout(() => {
-            timer.style.transition = 'width 6000ms linear';
-            timer.style.width = '100%';
+            progress.style.transition = 'width 6000ms linear';
+            progress.style.width = '100%';
         }, 50);
     }
 
     setInterval(() => {
-        current = (current + 1) % wishlist.length;
-        goTo(current);
+        current = (current + 1) % data.length;
+        setSlide(current);
     }, 6000);
 
     resetTimer();
 </script>
+
 </body>
 </html>
