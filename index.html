@@ -9,163 +9,229 @@
             --red: #E31837;
             --slate: #f4f7f9;
             --white: #ffffff;
-            --text: #333;
+            --gold: #b2975d;
         }
 
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; 
-            background-color: var(--slate); margin: 0; color: var(--text);
+            font-family: -apple-system, system-ui, sans-serif; 
+            background-color: var(--slate); margin: 0; color: #333;
+            overflow-x: hidden;
         }
 
         header {
             background: var(--white); padding: 1rem 5%;
             border-bottom: 3px solid var(--red);
             display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; z-index: 1000;
+            position: sticky; top: 0; z-index: 100;
         }
 
-        .container {
-            width: 100%; max-width: 1100px;
-            margin: 0 auto; padding: 20px; box-sizing: border-box;
-        }
+        .container { width: 100%; max-width: 1100px; margin: 0 auto; padding: 20px; }
 
-        /* --- WISHLIST NAVIGATION --- */
+        /* --- HORIZONTAL WISHLIST --- */
         .wishlist-nav {
             display: flex; gap: 15px; overflow-x: auto;
-            padding: 10px 5px 30px 5px; scrollbar-width: none;
+            padding: 10px 5px 25px 5px; scrollbar-width: none;
             -webkit-overflow-scrolling: touch;
         }
         .wishlist-nav::-webkit-scrollbar { display: none; }
 
         .wish-card {
-            background: var(--white); padding: 18px;
-            border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            cursor: pointer; transition: 0.3s ease;
-            border-bottom: 3px solid transparent;
-            flex: 0 0 180px; text-align: left;
+            background: var(--white); padding: 20px; border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06); cursor: pointer;
+            flex: 0 0 220px; border-bottom: 4px solid transparent;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .wish-card.active {
-            border-bottom-color: var(--red);
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-        }
+        .wish-card.active { border-bottom-color: var(--red); transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        .wish-card h4 { margin: 0; color: var(--navy); font-size: 1rem; }
+        .wish-card p { margin: 5px 0 0; font-size: 0.8rem; color: #666; font-weight: bold; }
 
-        .wish-card h4 { margin: 0; color: var(--navy); font-size: 0.95rem; }
-        .wish-card .meta { font-size: 0.75rem; color: #666; margin-top: 5px; font-weight: 500; }
-        .wish-card .prob { font-size: 0.7rem; color: var(--red); font-weight: bold; margin-top: 8px; display: block; }
-
-        /* --- AI INSIGHT SECTION --- */
+        /* --- AI INSIGHT BANNER --- */
         .ai-vault {
-            background: var(--white); border-radius: 12px;
-            box-shadow: 0 4px 25px rgba(0,0,0,0.08);
-            overflow: hidden; position: relative; margin-top: 10px;
+            background: var(--white); border-radius: 8px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.08); overflow: hidden;
+            position: relative; margin-top: 10px;
         }
 
-        .ai-track {
-            display: flex; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        .ai-track { display: flex; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
 
-        .ai-panel {
-            min-width: 100%; padding: 60px 10%;
-            box-sizing: border-box; text-align: center;
-        }
+        .ai-panel { min-width: 100%; padding: 60px 10%; box-sizing: border-box; text-align: center; }
 
-        .ai-panel span { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 2px; }
-
-        .ai-panel p {
-            font-size: 1.6rem; color: var(--navy);
-            font-weight: 300; line-height: 1.4; margin: 25px 0 35px 0;
-        }
-
-        .ai-panel b { color: var(--red); font-weight: 600; }
+        .ai-panel span { font-size: 0.75rem; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; font-weight: bold; }
+        .ai-panel p { font-size: 1.8rem; color: var(--navy); font-weight: 300; line-height: 1.4; margin: 25px 0; }
+        .ai-panel b { color: var(--red); font-weight: 700; }
 
         .btn-convert {
-            background: var(--red); color: white;
-            padding: 16px 45px; border: none; border-radius: 4px;
-            font-weight: bold; text-transform: uppercase;
-            cursor: pointer; width: 100%; max-width: 320px;
-            transition: 0.2s;
-        }
-        .btn-convert:hover { background: #bd142d; }
-
-        /* --- RESPONSIVE LOGIC --- */
-        @media (min-width: 1024px) {
-            .wishlist-nav { justify-content: space-between; overflow: hidden; }
-            .wish-card { flex: 1; max-width: 160px; }
-            .ai-panel p { font-size: 2rem; }
+            background: var(--red); color: white; padding: 18px 50px;
+            border: none; border-radius: 2px; font-weight: bold;
+            cursor: pointer; width: 100%; max-width: 350px;
+            text-transform: uppercase; letter-spacing: 1px;
         }
 
-        @media (max-width: 600px) {
-            .ai-panel { padding: 40px 20px; }
-            .ai-panel p { font-size: 1.25rem; }
-            .wish-card { flex: 0 0 150px; }
+        /* --- PRE-FILLED DRAWER --- */
+        #goal-drawer {
+            position: fixed; bottom: -100%; left: 0; width: 100%; height: 90vh;
+            background: var(--white); border-top: 5px solid var(--navy);
+            box-shadow: 0 -15px 50px rgba(0,0,0,0.3);
+            transition: 0.6s cubic-bezier(0.1, 0.9, 0.2, 1);
+            z-index: 2000; padding: 40px 20px; box-sizing: border-box;
+            overflow-y: auto;
         }
 
-        .progress-line {
-            height: 4px; background: var(--navy);
-            width: 0%; position: absolute; bottom: 0;
+        #goal-drawer.open { bottom: 0; }
+
+        .form-group { max-width: 500px; margin: 0 auto 20px; text-align: left; }
+        label { display: block; font-size: 0.75rem; font-weight: bold; color: #888; margin-bottom: 8px; text-transform: uppercase; }
+        input {
+            width: 100%; padding: 15px; border: 1px solid #ddd;
+            border-radius: 4px; font-size: 1.1rem; box-sizing: border-box;
+            background: #f9f9f9; color: var(--navy);
         }
+
+        .confirm-btn {
+            background: var(--navy); color: white; width: 100%;
+            padding: 20px; border: none; font-weight: bold;
+            cursor: pointer; margin-top: 10px; font-size: 1rem;
+        }
+
+        .progress-line { height: 5px; background: var(--navy); width: 0%; position: absolute; bottom: 0; }
+
+        /* Animation for "Rich" feel */
+        @keyframes successPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); background: var(--gold); }
+            100% { transform: scale(1); }
+        }
+        .success-active { animation: successPop 0.5s ease; }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="font-weight: 900; color: var(--navy); font-size: 1.2rem; letter-spacing: -0.5px;">LIFE PLAN</div>
-    <div style="color:var(--red); font-weight:bold; font-size:0.75rem; letter-spacing: 1px;">STRATEGY ENGINE</div>
+    <div style="font-weight: 900; color: var(--navy); font-size: 1.2rem;">LIFE PLAN</div>
+    <div style="color:var(--gold); font-weight:bold; font-size:0.75rem;">ADVISORY SERVICES</div>
 </header>
 
 <div class="container">
-    <div class="wishlist-nav" id="wish-nav">
-        </div>
+    <div class="wishlist-nav" id="wish-nav"></div>
 
     <div class="ai-vault">
-        <div class="ai-track" id="ai-track">
-            </div>
+        <div class="ai-track" id="ai-track"></div>
         <div class="progress-line" id="progress"></div>
     </div>
 </div>
 
+<div id="goal-drawer">
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h2 style="color:var(--navy); margin:0;">Confirm Strategy</h2>
+        <p style="color:#666;">AI-Optimized Goal Parameters</p>
+    </div>
+
+    <div class="form-group">
+        <label>Selected Wish</label>
+        <input type="text" id="f-name">
+    </div>
+
+    <div class="form-group">
+        <label>Horizon (Years)</label>
+        <input type="text" id="f-years">
+    </div>
+
+    <div class="form-group">
+        <label>Monthly Contribution Impact</label>
+        <input type="text" id="f-cost">
+    </div>
+
+    <div class="form-group" style="text-align:center;">
+        <button class="confirm-btn" onclick="finalize()">ACTIVATE GOAL</button>
+        <p onclick="closeDrawer()" style="color:var(--red); cursor:pointer; margin-top:20px; font-weight:bold; font-size:0.8rem;">DISMISS</p>
+    </div>
+</div>
+
 <script>
-    const data = [
-        { name: "Dream Home", time: "5 Years", prob: "High Match", text: "Your <b>dream home</b> is not 5 years away. One <b>smart step today</b> puts the keys in your hand in 5 years." },
-        { name: "Global Travel", time: "2 Years", prob: "Ready Now", text: "The <b>world</b> is ready for you. A <b>savings allocation today</b> guarantees your departure in 24 months." },
-        { name: "Debt Free", time: "18 Months", prob: "Priority", text: "A <b>debt-free life</b> starts with one consolidated move. Your <b>first payment today</b> clears your path." },
-        { name: "Luxury Vehicle", time: "3 Years", prob: "Emerging", text: "The <b>road ahead</b> looks premium. A <b>dedicated vehicle fund</b> today puts you in the driver's seat by 2029." },
-        { name: "Legacy Fund", time: "10 Years", prob: "Strategic", text: "Building <b>generational wealth</b> requires a disciplined start. Your <b>contribution today</b> is their freedom tomorrow." },
-        { name: "Education", time: "1 Year", prob: "Immediate", text: "Invest in <b>yourself</b> first. An <b>education bridge</b> today unlocks your promotion next year." }
+    const wishlist = [
+        { 
+            name: "Dream home in 5 years", 
+            years: 5, 
+            cost: "$1,850", 
+            text: "Your <b>dream home</b> is not 5 years away. One <b>smart step today</b> puts the keys in your hand in 5 years." 
+        },
+        { 
+            name: "World Tour in 2 years", 
+            years: 2, 
+            cost: "$420", 
+            text: "Exploring the <b>globe</b> shouldn't wait. A <b>strategic budget shift</b> today secures your itinerary for year 2." 
+        },
+        { 
+            name: "Luxury Car in 3 years", 
+            years: 3, 
+            cost: "$950", 
+            text: "The <b>road ahead</b> looks premium. A <b>performance fund</b> today puts you in the driver's seat by 2029." 
+        },
+        { 
+            name: "Debt Free in 18 months", 
+            years: 1.5, 
+            cost: "$300", 
+            text: "Eliminate <b>high-interest debt</b>. Our AI recommends an <b>accelerated cycle</b> starting this month." 
+        }
     ];
 
+    let current = 0;
     const nav = document.getElementById('wish-nav');
     const track = document.getElementById('ai-track');
     const progress = document.getElementById('progress');
-    let current = 0;
 
-    nav.innerHTML = data.map((d, i) => `
-        <div class="wish-card ${i===0?'active':''}" onclick="setSlide(${i})">
+    // Init UI
+    nav.innerHTML = wishlist.map((d, i) => `
+        <div class="wish-card ${i===0?'active':''}" id="card-${i}" onclick="jumpTo(${i})">
             <h4>${d.name}</h4>
-            <div class="meta">${d.time} Horizon</div>
-            <span class="prob">${d.prob}</span>
+            <p>Target: ${d.years} Years</p>
         </div>
     `).join('');
 
-    track.innerHTML = data.map(d => `
+    track.innerHTML = wishlist.map(d => `
         <div class="ai-panel">
             <span>AI Perspective</span>
             <p>${d.text}</p>
-            <button class="btn-convert">Convert to Goal</button>
+            <button class="btn-convert" onclick="openDrawer()">Convert to Goal</button>
         </div>
     `).join('');
 
-    function setSlide(index) {
-        current = index;
+    function jumpTo(idx) {
+        current = idx;
+        updateUI();
+    }
+
+    function updateUI() {
         track.style.transform = `translateX(-${current * 100}%)`;
-        
         document.querySelectorAll('.wish-card').forEach((c, i) => {
             c.classList.toggle('active', i === current);
             if(i === current) c.scrollIntoView({ behavior: 'smooth', inline: 'center' });
         });
         resetTimer();
+    }
+
+    function openDrawer() {
+        const item = wishlist[current];
+        document.getElementById('f-name').value = item.name;
+        document.getElementById('f-years').value = item.years;
+        document.getElementById('f-cost').value = item.cost + " / month";
+        document.getElementById('goal-drawer').classList.add('open');
+    }
+
+    function closeDrawer() {
+        document.getElementById('goal-drawer').classList.remove('open');
+    }
+
+    function finalize() {
+        const btn = document.querySelector('.confirm-btn');
+        btn.innerText = "GOAL ACTIVATED ✓";
+        btn.style.background = "var(--gold)";
+        setTimeout(() => {
+            closeDrawer();
+            btn.innerText = "ACTIVATE GOAL";
+            btn.style.background = "var(--navy)";
+        }, 1500);
     }
 
     function resetTimer() {
@@ -178,12 +244,13 @@
     }
 
     setInterval(() => {
-        current = (current + 1) % data.length;
-        setSlide(current);
+        if(!document.getElementById('goal-drawer').classList.contains('open')) {
+            current = (current + 1) % wishlist.length;
+            updateUI();
+        }
     }, 6000);
 
     resetTimer();
 </script>
-
 </body>
 </html>
