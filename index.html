@@ -141,7 +141,7 @@
 
 <div id="side-list">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2 style="font-weight: 300; margin: 0;">Pipeline</h2>
+        <h2 style="font-weight: 300; margin: 0;">Wishlist</h2>
         <button onclick="toggleSide(false)" style="border: none; background: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
     </div>
     <div class="add-box">
@@ -170,7 +170,7 @@
     <span style="color:var(--gold); font-weight:bold; letter-spacing:2px; font-size: 0.8rem;">INTERNAL TRANSFER</span>
     <h2 id="drawer-title" style="margin:15px 0;"></h2>
     <p style="color:var(--slate); margin-bottom:30px; font-size: 0.9rem;">Executing AI strategy to transform this vision into a high-yield financial goal.</p>
-    <button class="btn-action" onclick="confirmTransformation()">Authorize Transformation</button>
+    <button class="btn-action" onclick="confirmTransformation()">Create Goal</button>
     <p onclick="closeDrawer()" style="cursor:pointer; color:var(--boa-red); margin-top:20px; font-weight:bold; font-size: 0.9rem;">Decline</p>
 </div>
 
@@ -198,7 +198,7 @@
                 <div style="flex: 1; padding-right: 10px;">
                     <div style="font-weight:bold; font-size: 0.9rem;">${g.name}</div>
                     <span style="font-size: 0.7rem; font-weight:bold; padding: 2px 6px; border-radius: 4px; background: ${g.activated ? '#e6f3ed' : '#f0f0f0'}; color: ${g.activated ? '#006139' : '#666'};">
-                        ${g.activated ? 'DEPLOYED' : 'IN PIPELINE'}
+                        ${g.activated ? 'Wishlist achieved' : 'Open'}
                     </span>
                 </div>
                 <div style="display: flex; gap: 10px;">
