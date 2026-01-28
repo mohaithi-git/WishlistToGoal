@@ -42,7 +42,9 @@
 
         .header-actions { display: flex; align-items: center; gap: clamp(10px, 3vw, 20px); }
         .wishlist-trigger { position: relative; cursor: pointer; transition: 0.2s; }
-        .heart-icon { color: var(--boa-red); font-size: clamp(22px, 5vw, 28px); }
+        
+        /* Updated Icon Color and Font */
+        .notes-icon { color: var(--boa-navy); font-size: clamp(22px, 5vw, 28px); }
         
         .badge { 
             position: absolute; top: -5px; right: -8px; background: var(--boa-navy); 
@@ -127,12 +129,12 @@
 <div class="overlay" id="overlay" onclick="toggleSide(false)"></div>
 
 <header>
-    <div class="logo-text">Wishlist To <span>Goal Transformation</span></div>
+    <div class="logo-text">Vision <span>Goal Transformation</span></div>
     <div class="header-actions">
         <div class="wishlist-trigger" onclick="toggleSide(true)" style="display: flex; align-items: center; gap: 8px;">
-            <div class="wishlist-label">My wishlist</div>
+            <div class="wishlist-label">My Wishlist</div>
             <div style="position: relative;">
-                <span class="heart-icon">♥</span>
+                <span class="notes-icon">📝</span>
                 <div class="badge" id="count-badge">0</div>
             </div>
         </div>
@@ -146,12 +148,10 @@
     </div>
     <div class="add-box">
         <input type="text" id="new-wish" placeholder="Enter new vision...">
-        <button onclick="addWish()">ADD</button>
+        <button onclick="addWish()">ADD NOTE</button>
     </div>
     <div id="wish-items"></div>
 </div>
-
-
 
 <div id="planning-section">
     <div class="nav-col nav-left" onclick="moveSlide(-1)"><div class="nav-btn">❮</div></div>
@@ -162,7 +162,7 @@
 </div>
 
 <div id="active-dashboard">
-    <h2 class="dashboard-title">Active Strategic Portfolio</h2>
+    <h2 class="dashboard-title">Wishlist Manifested</h2>
     <div class="dash-grid" id="dash-items"></div>
 </div>
 
@@ -170,7 +170,7 @@
     <span style="color:var(--gold); font-weight:bold; letter-spacing:2px; font-size: 0.8rem;">INTERNAL TRANSFER</span>
     <h2 id="drawer-title" style="margin:15px 0;"></h2>
     <p style="color:var(--slate); margin-bottom:30px; font-size: 0.9rem;">Executing AI strategy to transform this vision into a high-yield financial goal.</p>
-    <button class="btn-action" onclick="confirmTransformation()">Create Goal</button>
+    <button class="btn-action" onclick="confirmTransformation()">Goal creation with prefilled data</button>
     <p onclick="closeDrawer()" style="cursor:pointer; color:var(--boa-red); margin-top:20px; font-weight:bold; font-size: 0.9rem;">Decline</p>
 </div>
 
@@ -216,7 +216,7 @@
                 <div class="vault-panel">
                     <div class="ai-tag">AI-DRIVEN STRATEGY</div>
                     <p>${g.text}</p>
-                    <button class="btn-action" onclick="openDrawer(${g.id})">Initiate Transformation</button>
+                    <button class="btn-action" onclick="openDrawer(${g.id})">Create Smart Goal</button>
                 </div>
             `).join('');
             
